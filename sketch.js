@@ -86,7 +86,7 @@ function draw() {
 
     if(obstaclesGroup.isTouching(man)){
        score = score - 1;
-       obstacle1.changeImage(obstacle2img)
+       //obstacle1.changeImage(obstacle2img)
        }
        man.bounceOff(up);
     
