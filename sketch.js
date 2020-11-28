@@ -121,9 +121,12 @@ function draw() {
   fill("black");
   text("Earth Health: "+ score, 100,100);
   if(gameState === END){
-  textSize(45);
+  
     fill("White");
-    text("Extinction Event. 7.6 million people are dead due to the ignorance of many to", 100,400);
+    textSize(60);
+    text("Extinction Event", 500,300);
+    textSize(45);
+    text("7.6 million people are dead due to the ignorance of many to", 100,400);
     text("take care of our planet. The CO₂ built up in our atmosphere due to factories,", 100,470);
     text("cars, etc. Global warming is real and it's happening at an unreasonably fast", 100,540);
     text("rate. Events like tsunamis, wildfires, hurricanes, acid rain, and etc are ", 100,610);
