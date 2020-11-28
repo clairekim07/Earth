@@ -5,10 +5,8 @@ var up;
 var man, manImg;
 var ground, invisibleGround, groundImage;
 var back,backIMG;
-var cloudsGroup, cloudImage;
-var birdsGroup, birdImage;
-var obstacle1,obstacle2,obstacle1img,obstacle2img;
-
+var obstacle,obstacle2,obstacle1img,obstacle2img;
+var edges;
 var score=100;
 
 var gameOver;
@@ -17,10 +15,10 @@ localStorage["HighestScore"] = 100;
 
 function preload(){
   
-  backIMG = loadImage("land.jpg");
+  backIMG = loadImage("land.png");
   groundImage = loadImage("background.png");
    obstacle1img = loadImage("atree.png");
-   obstacle2img = loadImage("dtree.png")
+   obstacle2img = loadImage("dtree.png");
    
    manImg = loadImage("man1.gif");
  
@@ -41,9 +39,10 @@ function setup() {
   
   man = createSprite(50,60,20,50);
   man.addImage(manImg);
+  
   man.scale = 0.55;
-  man.setCollider("rectangle", 40, 40, 20, 80, -45);
-  man.debug=false;
+  man.setCollider("rectangle", 40, 10, 0, 0, 0);
+  man.debug=true;
   invisibleGround = createSprite(400,30,400,10);
   invisibleGround.visible = false;
   obstaclesGroup= new Group();0
@@ -58,7 +57,7 @@ function draw() {
   if (gameState===PLAY){
     //score = score + Math.round(getFrameRate()/62);
     ground.velocityX = -4;
-  
+    edges = createEdgeSprites();
     if(keyDown(RIGHT_ARROW)) {
       man.x = man.x + 8;
     }
@@ -86,12 +85,16 @@ function draw() {
 
     if(obstaclesGroup.isTouching(man)){
        score = score - 1;
-       //obstacle1.changeImage(obstacle2img)
+       obstacle.changeImage("dead_tree", obstacle2img);
        }
+       
        man.bounceOff(up);
     
        man.collide(invisibleGround); 
+       man.collide(edges); 
        man.collide(up);
+       
+       
   
   }
   else if (gameState === END) {
@@ -119,11 +122,11 @@ function draw() {
   if(gameState === END){
   textSize(45);
     fill("White");
-    text("Extintion Event. 7.6 million people are dead due to the ignorance of many to", 100,400);
-    text("take care of our planet. The co2 built up in our atmosphere due to factories", 100,470);
-    text("and coal buring technology. Global warming is real and it's happening to an", 100,540);
-    text("unreasonably fast rate. Tsunamis, wildfires, hurricanes, and acid rain are", 100,610);
-    text("just few events that are brought upon us because of global warming.", 100,680);
+    text("Extinction Event. 7.6 million people are dead due to the ignorance of many to", 100,400);
+    text("take care of our planet. The CO₂ built up in our atmosphere due to factories,", 100,470);
+    text("cars, etc. Global warming is real and it's happening at an unreasonably fast", 100,540);
+    text("rate. Events like tsunamis, wildfires, hurricanes, acid rain, and etc are ", 100,610);
+    text("brought upon us because of global warming. ", 100,680);
 
   }
      
@@ -134,8 +137,11 @@ function draw() {
 
 function spawnObstacles() {
   if(frameCount % 30 === 0) {
-    var obstacle = createSprite(displayWidth+100,Math.round(random(50,displayHeight-50)),50,150);
+    obstacle = createSprite(displayWidth+100,Math.round(random(50,displayHeight-50)),50,150);
+    obstacle.addImage(obstacle2img);
     obstacle.addImage(obstacle1img);
+    
+    
     obstacle.shapeColor="violet";
     //obstacle.debug = true;
     obstacle.velocityX = -8;
@@ -160,3 +166,42 @@ function reset(){
   score = 100;
   
 }
+
+/*
+var tree, treeImage1, treeImage2;
+
+var man, manImage, canvas;
+
+function preload(){
+manImage = loadAnimation("man1.gif");
+treeImage1 = loadImage("atree.png");
+treeImage2 = loadImage("dtree.png");
+}
+
+function setup(){
+
+  var canvas = createCanvas(displayWidth, displayHeight);
+
+  man = createSprite(displayWidth - 400, displayHeight- 40, 40, 80);
+  //man.addAnimation("man", manImage);
+  
+  tree = createSprite(displayWidth , displayHeight- 40, 40, 80);
+  tree.addImage( "tree1", treeImage1);
+  tree.addImage("tree2", treeImage2);
+  tree.velocityX = -1;
+
+}
+
+function draw(){
+  background("white");
+
+  tree.depth = man.depth;
+  if(man.isTouching(tree)){
+   tree.changeImage("tree2", treeImage2);
+   man.shapeColor = "red";
+    console.log("Hi")
+  }
+
+  drawSprites();
+}
+*/
