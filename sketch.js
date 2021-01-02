@@ -5,7 +5,7 @@ var up;
 var man, manImg;
 var ground, invisibleGround, groundImage;
 var back,backIMG;
-var obstacle,obstacle1,obstacle2,obstacle1img,obstacle11img,obstacle2img,obstacle22img;
+var plant,tree,plantimg,chickenimg,treeimg,bearimg;
 var edges;
 var score=100;
 
@@ -17,9 +17,9 @@ function preload(){
   
   backIMG = loadImage("land.png");
   groundImage = loadImage("background.png");
-   obstacle1img = loadImage("atree.png");
-   obstacle11img = loadImage("chicken.png");
-   obstacle22img = loadImage("bear.png");
+   plantimg = loadImage("atree.png");
+   chickenimg = loadImage("chicken.png");
+   bearimg = loadImage("bear.png");
    
    manImg = loadImage("man1.gif");
  
@@ -86,7 +86,7 @@ function draw() {
 
     if(obstaclesGroup.isTouching(man)){
        score = score - 1;
-       obstacle.changeImage("dead_tree", obstacle2img);
+       plant.changeImage("dead_tree", tree);
        }
        
        man.bounceOff(up);
@@ -141,35 +141,35 @@ function draw() {
 
 function spawnObstacles() {
   if(frameCount % 70 === 0) {
-    obstacle = createSprite(displayWidth+100,Math.round(random(50,displayHeight-50)),50,150);
-    obstacle.addImage(obstacle1img);
-    obstacle1 = createSprite(displayWidth+100,Math.round(random(40,displayHeight-50)),40,150);
-    obstacle1.addImage(obstacle11img);
+    plant = createSprite(displayWidth+100,Math.round(random(50,displayHeight-50)),50,150);
+    plant.addImage(plantimg);
+    chicken = createSprite(displayWidth+100,Math.round(random(40,displayHeight-50)),40,150);
+    chicken.addImage(chicken);
 
-    obstacle2 = createSprite(displayWidth+100,Math.round(random(40,displayHeight-50)),40,150);
-    obstacle2.addImage(obstacle22img);
+    tree = createSprite(displayWidth+100,Math.round(random(40,displayHeight-50)),40,150);
+    tree.addImage(treeimg);
     
     
-    obstacle.shapeColor="violet";
+    plant.shapeColor="violet";
     //obstacle.debug = true;
-    obstacle.velocityX = -8;
-    obstacle1.velocityX = -8;
-    obstacle2.velocityX = -8;
+    plant.velocityX = -8;
+    chicken.velocityX = -8;
+    tree.velocityX = -8;
     
     
           
-    obstacle.scale = 0.4;
-    obstacle.lifetime = 350;
+    plant.scale = 0.4;
+    plant.lifetime = 350;
 
-    obstacle1.scale = 0.4;
-    obstacle1.lifetime = 350;
+    chicken.scale = 0.4;
+    chicken.lifetime = 350;
 
-    obstacle2.scale = 0.4;
-    obstacle2.lifetime = 350;
+    tree.scale = 0.4;
+    tree.lifetime = 350;
     //add each obstacle to the group
-    obstaclesGroup.add(obstacle);
-    obstaclesGroup.add(obstacle1);
-    obstaclesGroup.add(obstacle2);
+    obstaclesGroup.add(plant);
+    obstaclesGroup.add(chicken);
+    obstaclesGroup.add(tree);
   }
   }
 
