@@ -15,12 +15,12 @@ localStorage["HighestScore"] = 100;
 
 function preload(){
   
-  backIMG = loadImage("land.png");
-  groundImage = loadImage("background.png");
+   backIMG = loadImage("land.png");
+   groundImage = loadImage("background.png");
    plantimg = loadImage("atree.png");
    chickenimg = loadImage("chicken.png");
    bearimg = loadImage("bear.png");
-   
+   treeimg = loadImage("dtree.png");
    manImg = loadImage("man1.gif");
  
 }
@@ -42,11 +42,12 @@ function setup() {
   man.addImage(manImg);
   
   man.scale = 0.55;
-  man.setCollider("rectangle", 40, 10, 0, 0, 0);
+  man.setCollider("rectangle", 100, 50, 0, 0, 0);
   man.debug=true;
   invisibleGround = createSprite(400,30,400,10);
   invisibleGround.visible = false;
-  obstaclesGroup= new Group();0
+  plantsGroup= new Group();
+  obstaclesGroup= new Group();
   
   score = 100;
 }
@@ -84,9 +85,11 @@ function draw() {
       ground.x = ground.width/15;
     }
 
-    if(obstaclesGroup.isTouching(man)){
+    if(plantsGroup.collide(man)){
        score = score - 1;
-       plant.changeImage("dead_tree", tree);
+       plant.changeImage("dead_tree", treeimg);
+       plantsGroup.remove(plant);
+       plant.velocityX = -8;
        }
        
        man.bounceOff(up);
@@ -94,10 +97,7 @@ function draw() {
        man.collide(invisibleGround); 
        man.collide(edges); 
        man.collide(up);
-       
-       
-  
-  }
+    }
   else if (gameState === END) {
     
     //set velcity of each game object to 0
@@ -105,13 +105,13 @@ function draw() {
     man.velocityY = 0;
     obstaclesGroup.destroyEach();
     obstaclesGroup.velocityXEach=0;
+    plantsGroup.destroyEach();
+    plantsGroup.velocityXEach=0;
     back.visible = true;
     ground.visible = false;
     score=0; 
     man.x = -50;
     man.y = -50;
-    
-    
     
   }
   
@@ -140,36 +140,41 @@ function draw() {
 
 
 function spawnObstacles() {
-  if(frameCount % 70 === 0) {
+  if(frameCount % 120 === 0) {
     plant = createSprite(displayWidth+100,Math.round(random(50,displayHeight-50)),50,150);
     plant.addImage(plantimg);
-    chicken = createSprite(displayWidth+100,Math.round(random(40,displayHeight-50)),40,150);
-    chicken.addImage(chicken);
-
-    tree = createSprite(displayWidth+100,Math.round(random(40,displayHeight-50)),40,150);
-    tree.addImage(treeimg);
-    
+    plant.addImage("dead_tree", treeimg);
     
     plant.shapeColor="violet";
     //obstacle.debug = true;
     plant.velocityX = -8;
-    chicken.velocityX = -8;
-    tree.velocityX = -8;
     
-    
-          
     plant.scale = 0.4;
-    plant.lifetime = 350;
+    plant.lifetime = 400;
 
+    plantsGroup.add(plant);
+    
+  }
+  if(frameCount % 100 === 0) {
+    chicken = createSprite(displayWidth+100,Math.round(random(30,displayHeight-50)),40,150);
+    chicken.addImage(chickenimg);
+
+    chicken.velocityX = -8;
+    
     chicken.scale = 0.4;
-    chicken.lifetime = 350;
+    chicken.lifetime = 400;
 
-    tree.scale = 0.4;
-    tree.lifetime = 350;
-    //add each obstacle to the group
-    obstaclesGroup.add(plant);
     obstaclesGroup.add(chicken);
-    obstaclesGroup.add(tree);
+  }
+  if(frameCount % 110 === 0) {
+    bear = createSprite(displayWidth+100,Math.round(random(40,displayHeight-50)),30,150);
+    bear.addImage(bearimg);
+    
+    bear.velocityX = -8;
+    bear.scale = 0.4;
+    bear.lifetime = 400;
+    
+    obstaclesGroup.add(bear);
   }
   }
 
@@ -186,7 +191,7 @@ function reset(){
 }
 
 /*
-var tree, treeImage1, treeImage2;
+var tree, treeImage1, treeImage2, treesGroup;
 
 var man, manImage, canvas;
 
@@ -200,26 +205,49 @@ function setup(){
 
   var canvas = createCanvas(displayWidth, displayHeight);
 
-  man = createSprite(displayWidth - 400, displayHeight- 40, 40, 80);
-  //man.addAnimation("man", manImage);
-  
-  tree = createSprite(displayWidth , displayHeight- 40, 40, 80);
-  tree.addImage( "tree1", treeImage1);
-  tree.addImage("tree2", treeImage2);
-  tree.velocityX = -1;
+  man = createSprite(displayWidth - 800, displayHeight- 40, 40, 80);
+  man.debug = true;
+  man.setCollider("rectangle", 0,0, 40, 300)
+  man.addAnimation("man", manImage);
+
+  treesGroup = new Group ();
 
 }
 
 function draw(){
   background("white");
+//for(var i =0; i< treesGroup.length, i++)
+ // tree.depth = man.depth
+ if(treesGroup.collide(man)){
+   console.log(treesGroup.length);
+  tree.addImage("tree2", treeImage2);
+  tree.changeImage("tree2", treeImage2);
+  tree.scale = 0.5;
+  tree.velocityX = -3;
+  treesGroup.remove(tree);
+   console.log("Hi")
+ }
 
-  tree.depth = man.depth;
-  if(man.isTouching(tree)){
-   tree.changeImage("tree2", treeImage2);
-   man.shapeColor = "red";
-    console.log("Hi")
+   spawnTree();
+   drawSprites();
+  
+}
+
+function spawnTree(){
+
+  if(frameCount % 250 === 0){
+    console.log(frameCount);
+    tree = createSprite(displayWidth , displayHeight- 40, 40, 80);
+    tree.debug = true;
+    tree.addImage( "tree1", treeImage1);
+    tree.setCollider("rectangle", 0,0, 100, 100);
+    tree.velocityX = -3;
+
+    man.depth = tree.depth;
+    man.depth = man.depth + 1;
+
+    treesGroup.add(tree);
   }
-
-  drawSprites();
+ 
 }
 */
